@@ -1,0 +1,13 @@
+language: generic
+# Tell Travis that we need sudo access/privileges
+sudo: required
+
+# Tell Travis that we need a copy of Docker ready to go.
+services:
+  - docker
+
+before_install:
+  - docker build -t petercatalin/docker-react-training -f Dockerfile.dev .
+
+script:
+  - docker run -e CI=true petercatalin/docker-react-training npm run test
