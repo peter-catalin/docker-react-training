@@ -11,3 +11,23 @@ before_install:
 
 script:
   - docker run -e CI=true petercatalin/docker-react-training npm run test
+
+deploy:
+  # Tell travis CI where are we going to host or application
+  provider: elasticbeanstalk
+  region: 'us-east-2'
+  app: 'docker-react-training'
+  env: 'DockerReactTraining-env'
+
+  # Travis CI is going to upload a .zip file containing all our code to a S3 bucket
+  # That bucket (I think) is shared between all our apps hosted on Elastic Beanstalk
+  bucket_name: 'elasticbeanstalk-us-east-2-977236078134'
+
+  # Inside that bucket we need to specify the path (folder) for this particular app
+  # By default, it will have the same name as the app being deployed.
+  bucket_path: 'docker-react-training'
+  on:
+    branch: master
+  access_key_id: $AWS_ACCESS_KEY
+  secret_access_key:
+    secure: 'AWS_SECRET_KEY'
